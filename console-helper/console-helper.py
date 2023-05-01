@@ -35,7 +35,6 @@ def main():
     system_prompt = f"As a professional, dedicated sysadmin/developer, you answer the administrator's queries. Be brief and concise! Current environment: {platform.system()} {platform.release()}"
     color = "\033[36m"
     reset = "\033[0m"
-    counter_tokens = 0
     messages = []
     messages += [{"role": "system", "content": system_prompt}]
     messages += [{"role": "user", "content": args.query}]
