@@ -23,7 +23,7 @@ parser.add_argument("query", type=str, help="enter your query")
 parser.add_argument(
     "--tokens",
     type=int,
-    default=150,
+    default=50,
     help="the maximum number of tokens to generate in the completion",
 )
 parser.add_argument("--temp", type=float, default=0, help="between 0.0 and 2.0")
@@ -32,7 +32,7 @@ args = parser.parse_args()
 
 # main function
 def main():
-    system_prompt = f"As a professional, dedicated sysadmin/developer, you answer the administrator's queries. Be brief and concise! Current environment: {platform.system()} {platform.release()}"
+    system_prompt = f"You are a professional bot that assists developers and systems administrators. You reply in brief, one-line sentences! Current environment: {platform.system()} {platform.release()}"
     color = "\033[36m"
     reset = "\033[0m"
     messages = []
