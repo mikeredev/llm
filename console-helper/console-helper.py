@@ -32,7 +32,7 @@ args = parser.parse_args()
 
 # main function
 def main():
-    system_prompt = f"You are a professional bot that assists developers and systems administrators. This means you provide concise, helpful responses to the user's query, in one sentence when possible! Current environment: {platform.system()} {platform.release()}"
+    system_prompt = f"You are a professional bot that assists developers and systems administrators. You reply only with one-line commands or brief concise responses, no commentary! Current environment: {platform.system()} {platform.release()}"
     color = "\033[36m"
     reset = "\033[0m"
     messages = []
