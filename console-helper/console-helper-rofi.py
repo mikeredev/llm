@@ -40,7 +40,7 @@ def main():
     subprocess.run(rofi_cmd)
 
     # Show notif with output
-    # subprocess.run(["notify-send", "gpt", chat_output])ai
+    # subprocess.run(["notify-send", "gpt", chat_output])
 
 
 if __name__ == "__main__":
