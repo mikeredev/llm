@@ -42,8 +42,8 @@ def main():
         THEME,
     ]
     user_input = subprocess.check_output(rofi_cmd, universal_newlines=True).strip()
-    chat = generate_response(user_input)
-    chat_output = chat["reply"]
+    chat_response = generate_response(user_input)
+    chat_output = chat_response["reply"]
 
     # Display the output in rofi
     rofi_cmd = [
