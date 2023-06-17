@@ -1,5 +1,6 @@
 import argparse
 import openai
+import os
 import platform
 import time
 
@@ -13,7 +14,7 @@ Current environment: {platform.system()} {platform.release()}
 """
 
 # constants
-default_model = "gpt-3.5-turbo"
+default_model = os.environ.get("OPENAI_MODEL")
 default_tokens = 150
 default_temp = 0
 color = "\033[36m"
@@ -33,7 +34,7 @@ def chat(messages, max_tokens, temp, model):
     return {"reply": reply, "tokens": tokens}
 
 
-# function to be called
+# function to generate reponse
 def generate_response(
     query, tokens=default_tokens, temp=default_temp, model=default_model
 ):
