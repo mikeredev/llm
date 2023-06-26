@@ -1,7 +1,7 @@
 ## chatbot applications/POCs
 
 ### chaos-gpt
-- simple script exploring Janus' [simulator theory](https://www.lesswrong.com/posts/vJFdjigzmcXMhNTsx/simulators)
+- simple script exploring [Janus'](https://twitter.com/repligate) [simulator theory](https://www.lesswrong.com/posts/vJFdjigzmcXMhNTsx/simulators)
 
 ### chatbot-gui
 - (WIP) POC of chat completions with history using a customtkinter GUI
