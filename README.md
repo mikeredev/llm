@@ -1,4 +1,5 @@
 ## chatbot applications/POCs
+- see [modules](https://github.com/mikeredev/modules) for implementation
 
 ### chaos-gpt
 - simple script exploring [Janus'](https://twitter.com/repligate) [simulator theory](https://www.lesswrong.com/posts/vJFdjigzmcXMhNTsx/simulators)
