@@ -1,7 +1,7 @@
 ## chatbot applications/POCs
 - scratch directory
 - see [modules](https://github.com/mikeredev/modules) for implementation / custom dependencies
-- see [system-mgmt](https://github.com/mikeredev/modules) for working implementations
+- see [system-mgmt](https://github.com/mikeredev/system-mgmt) for working implementations
 
 ### chaos-gpt
 - simple script exploring [Janus'](https://twitter.com/repligate) [simulator theory](https://www.lesswrong.com/posts/vJFdjigzmcXMhNTsx/simulators)
