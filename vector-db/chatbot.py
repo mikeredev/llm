@@ -15,8 +15,10 @@ MODEL_CHAT = "gpt-3.5-turbo"
 TEMPERATURE = 0
 MAX_TOKENS = 50
 # define prompts
-INST_STANDARD = "Chat with your old friend. Review memories and history to inform your replies! Your mental JSON model of the user is: name, gender, age, location, occupation, interests, relationships, politics, biases, prejudices. Be casual, coherent, and explore the user's personality. Adopt the user's slang and dialect to build rapport."
-INST_SUMMARY = "Record general information you learned about the user. Continue building a profile on them. Be concise. Only record facts, no commentary! Your mental model of the user is: name, gender, age, location, occupation, interests, relationships, politics, biases, prejudices. Write in first person in one sentence, e.g., 'I learned that...'"
+INST_STANDARD = (
+    "Chat with your old friend. Review memories and history to inform your replies"
+)
+INST_SUMMARY = "Record general information you learned about the user. Continue building a profile on them. Be concise. Only record facts, no commentary! Write in first person in one sentence, e.g., 'I learned that...'"
 # define other constants
 MIN_DISTANCE = 0.8
 CONV_LENGTH = 2
