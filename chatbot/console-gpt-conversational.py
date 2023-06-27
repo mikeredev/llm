@@ -6,18 +6,7 @@ from colorama import Fore, Style
 
 # function to get user input
 def get_user_input(output="console"):
-    if output == "rofi":
-        rofi_cmd = [
-            "rofi",
-            "-dmenu",
-            "-p",
-            "speak to the bot, human: ",
-            "-theme",
-            "~/.config/rofi/themes/chatbot.rasi",
-        ]
-        user_prompt = subprocess.check_output(rofi_cmd, universal_newlines=True).strip()
-    else:
-        user_prompt = input(f"{Fore.BLUE}")
+    user_prompt = input(f"{Fore.BLUE}")
     return user_prompt
 
 
@@ -39,15 +28,7 @@ def get_bot_reply(messages, output="console"):
     )
     reply = response.choices[0].message.content
     tokens = response.usage.total_tokens
-    if output == "rofi":
-        rofi_cmd = [
-            "rofi",
-            "-e",
-            "🤖 " + reply,
-            "-theme" "~/.config/rofi/themes/chatbot.rasi",
-        ]
-        subprocess.run(rofi_cmd)
-    elif output == "notify":
+    if output == "notify":
         notify_cmd = ["notify-send", "gpt fren", reply, "-t", "10000"]
         subprocess.run(notify_cmd)
     print(f"{Fore.LIGHTCYAN_EX}\n==> {reply}{Style.RESET_ALL}")
