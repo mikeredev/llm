@@ -1,13 +1,8 @@
-## chatbot applications/POCs
+#### OpenAI chatbots
 
-### gpt-chatbot-console
-- console AI helper
-
-### gpt-chatbot-conversation
-- creates realistic conversation by passing previous replies back to the bot as context
-
-### gpt-chatbot-rofi
-- rofi dmenu chatbot
-
-### vector-db
-- POC of chatbot with memory recollection using Pinecone
+| script                   | description                                     |
+|:-------------------------|:------------------------------------------------|
+| gpt-chatbot-console      | console-based AI helper                         |
+| gpt-chatbot-conversation | realistic context-aware conversations           |
+| gpt-chatbot-rofi         | rofi-based chatbot                              |
+| vector-db                | chatbot with memory recollection using pinecone |
