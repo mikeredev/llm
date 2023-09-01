@@ -1,10 +1,15 @@
-from datetime import datetime
-import json
-import openai
-import os
-import pinecone
-from uuid import uuid4
-
+try:
+    from uuid import uuid4
+    from datetime import datetime
+    import json
+    import openai
+    import os
+    import sys
+    sys.path.append(
+        f"/home/{os.getlogin()}/data/scripts/openai/venv/lib/python3.11/site-packages")
+    import pinecone
+except Exception as e:
+    print(f"Failed to load custom modules: {e}")
 # define pinecone constants
 PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
 PINECONE_REGION = "asia-northeast1-gcp"
@@ -36,7 +41,8 @@ PRINT_DEBUG = True
 # function to print debug information
 def print_debug(title, text):
     if PRINT_DEBUG:
-        print(f"{DEBUG_HDR}[{title.upper()}]{DEBUG_TXT} " + str(text) + f"{RESET}")
+        print(f"{DEBUG_HDR}[{title.upper()}]{DEBUG_TXT} " +
+              str(text) + f"{RESET}")
 
 
 # function to initialise pinecone
@@ -147,8 +153,10 @@ while True:
     if len(history) > CONV_LENGTH:
         history.pop(0)
     # prepare history metadata
-    history_metadata_str = ", ".join([str(entry["metadata"]) for entry in history])
-    print_debug("chat", "cycle " + str(message_counter) + "/" + str(CONV_LENGTH))
+    history_metadata_str = ", ".join(
+        [str(entry["metadata"]) for entry in history])
+    print_debug("chat", "cycle " + str(message_counter) +
+                "/" + str(CONV_LENGTH))
 
     # update total token cost counter
     tokens_total += chat_output["tokens"]
@@ -170,7 +178,8 @@ while True:
         vector = embed(summary["reply"])
         unique_id = str(uuid4())
         payload = [
-            (unique_id, vector, {"memory": summary["reply"], "timestamp": timestamp})
+            (unique_id, vector, {
+             "memory": summary["reply"], "timestamp": timestamp})
         ]
 
         # upsert payload
