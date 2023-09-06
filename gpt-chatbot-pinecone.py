@@ -12,7 +12,7 @@ except Exception as e:
     print(f"Failed to load custom modules: {e}")
 # define pinecone constants
 PINECONE_API_KEY = os.environ.get("PINECONE_API_KEY")
-PINECONE_REGION = "asia-northeast1-gcp"
+PINECONE_REGION = "gcp-starter"
 PINECONE_INDEX = "test1"
 # define openai constants
 MODEL_EMBED = "text-embedding-ada-002"
@@ -27,7 +27,7 @@ INST_SUMMARY = "Record general information you learned about the user. Continue 
 # define other constants
 MIN_DISTANCE = 0.8
 CONV_LENGTH = 2
-USERID = "ADMIN"
+USERID = "USER"
 AIID = "BOT"
 DEBUG_HDR = "\033[34m"
 DEBUG_TXT = "\033[36m"
