@@ -2,6 +2,7 @@
 """ gpt-news.py
 desc:       provides a handy summary of the latest news updates (or any other RSS feed)
 usage:      python ~/data/scripts/system-mgmt/gpt-news.py
+requires:   openai_chat, feedparser
 """
 
 try:
@@ -10,10 +11,10 @@ try:
     from datetime import datetime
     import os
     import sys
-    sys.path.append(
-        f"/home/{os.getlogin()}/data/scripts/openai/venv/lib/python3.11/site-packages")
+    venv_path = os.path.join(os.getcwd(), "venv",
+                             "lib", "python3.11", "site-packages")
+    sys.path.append(venv_path)
     import feedparser
-    print("🤖")
 except Exception as e:
     print(f"Failed to load custom modules: {e}")
 
@@ -51,5 +52,5 @@ reply = openai_chat.response(
     """, str(news), tokens=400, temperature=0.2)
 news_updates = reply["output"]
 tokens = reply["total_tokens"]
-subprocess.run(["dunstify", "-u", "critical", "-a", "pynews",
+subprocess.run(["dunstify", "-u", "critical", "-a", "gpt-news",
                f"{formatted_datetime} {tokens}", news_updates])
