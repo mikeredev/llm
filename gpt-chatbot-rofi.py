@@ -12,14 +12,11 @@ import subprocess
 # import non-standard/custom modules
 import openai_chat
 
-# set constants
-custom_theme = "~/.config/rofi/themes/chatbot.rasi"
-
 # main
 if __name__ == "__main__":
     try:
         # Open rofi bar and get user input
-        rofi_cmd = ["rofi", "-dmenu", "-p", "🤖 ", "-theme", custom_theme]
+        rofi_cmd = ["rofi", "-dmenu", "-p", "🤖 ", "-theme", "dmenu"]
         user_input = subprocess.check_output(rofi_cmd, universal_newlines=True).strip()
 
         # send the user_input to the chatcompletion function
@@ -30,7 +27,7 @@ if __name__ == "__main__":
         )
 
         # Display the output in rofi
-        rofi_cmd = ["rofi", "-e", "🤖 " + response["output"], "-theme", custom_theme]
+        rofi_cmd = ["rofi", "-e", "🤖 " + response["output"], "-theme", "dmenu"]
         subprocess.run(rofi_cmd)
 
     except Exception as e:
