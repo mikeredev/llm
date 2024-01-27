@@ -3,7 +3,7 @@ import os
 import requests
 import sys
 
-# chaosgpt bias explorer usage
+# chaos-gpt bias explorer usage
 # ------------------------------------------------
 # chaos mode: intentionally say the opposite of chatgpt
 # python chaos-gpt.py "would you rather fight Donald or Barack?" --mode chaos
