@@ -1,0 +1,1 @@
+/home/mishi/documents/github/dotfiles/scripts/tools/openai_chat.py
