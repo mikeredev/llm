@@ -4,7 +4,7 @@ desc:       module for creating and returning an OpenAI chat completion
 requires:   openai
 usage:      import module openai_chat
             openai_chat.response("Reply as an expert Python developer", "How do I...")
-            openai_chat.response("Reply as an expert Python developer", "How do I...", tokens=500, model=gpt-4, temp=1.3)
+            openai_chat.response("Reply as an expert Python developer", "How do I...", tokens=500, model=gpt-4, temperature=1.3)
             response = openai_chat.response("Reply as an expert Python developer", user_query)
             print(response["output"])
 note:       openai module expects but does not require OPENAI_API_KEY environment variable

@@ -1,0 +1,43 @@
+#!/usr/bin/env python
+# uses: openai_chat
+
+# import required modules
+import subprocess
+
+# import custom modules
+import openai_chat
+
+# define the system prompt
+system_prompt = "Be concise and friendly."
+
+# function to generate response
+def get_openai_response(user_input):
+    response = openai_chat.response(system_prompt, user_input, tokens=500, model='gpt-3.5-turbo', temperature=1.3)
+    return response["output"]
+
+if __name__ == "__main__":
+    try:
+        # command to call rofi
+        rofi_command = ['rofi', '-dmenu', '-p', '🤖', '-theme', 'rofi-gpt']
+        user_input = subprocess.run(rofi_command, capture_output=True, text=True).stdout.strip()
+
+        # check if user cancelled rofi
+        if not user_input:
+            print("User canceled. Exiting.")
+        else:
+            # get the bot response
+            openai_response = get_openai_response(user_input)
+
+            # display the response in console
+            print(openai_response)
+
+            # send notification with response
+            dunstify_command = ['dunstify', openai_response, '-a', 'rofi-gpt']
+            subprocess.run(dunstify_command)
+
+    except Exception as e:
+        # print the error to console
+        print(f"Error! {e}")
+
+        # send a notification with the error
+        error_command = ['dunstify', '-u', 'critical', 'Error', e]
