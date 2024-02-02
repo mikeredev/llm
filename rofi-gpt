@@ -18,7 +18,7 @@ def get_openai_response(user_input):
 if __name__ == "__main__":
     try:
         # command to call rofi
-        rofi_command = ['rofi', '-dmenu', '-p', '🤖', '-theme', 'rofi-gpt']
+        rofi_command = ['rofi', '-dmenu', '-p', '🤖', '-theme', '~/.config/rofi/themes/rofi-gpt']
         user_input = subprocess.run(rofi_command, capture_output=True, text=True).stdout.strip()
 
         # check if user cancelled rofi
