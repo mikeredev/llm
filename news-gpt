@@ -1,0 +1,177 @@
+#!venv/bin/python
+# uses: feedparser 6.0.11, openai 1.10.0
+
+# import modules
+import argparse
+import feedparser
+from openai import OpenAI
+import subprocess
+import sys
+
+# show debug output in console
+DEBUG = True
+
+# define how many items to return from which feed
+FEED_URL = "https://feeds.bbci.co.uk/news/world/rss.xml"
+FEED_SIZE = 5
+
+# define request parameters
+SYSTEM_PROMPT = f"Please summarize these news items in {FEED_SIZE} succinct bullet-points."
+TOKENS = 200
+MODEL = "gpt-3.5-turbo"
+TEMPERATURE = 0.3
+
+
+# function to print an info/warning/error debug line
+def print_debug(type, text):
+    # ANSI escape codes for colors
+    DIM = "\033[2m"
+    RESET = "\033[0m"
+
+    # map numeric type to string type
+    type_mapping = {0: "INFO", 1: "WARN", 2: "CRIT"}
+
+    # set display_type based on the numeric type
+    display_type = type_mapping.get(type, str(type))
+
+    # print the formatted debug line
+    if DEBUG:
+        print(f"{DIM}[{display_type}] {text}{RESET}")
+
+
+# function to parse script arguments
+def parse_arguments():
+    parser = argparse.ArgumentParser(description="news-gpt")
+
+    parser.add_argument(
+        "--feed-url", "-url",
+        default=FEED_URL,
+        help=f"RSS feed to parse (default: {FEED_URL})"
+    )
+
+    parser.add_argument(
+        "--feed-size", "-items",
+        default=FEED_SIZE,
+        help=f"Items to return from feed (default: {FEED_SIZE})"
+    )
+
+    parser.add_argument(
+        "--system_prompt", "-s",
+        default=SYSTEM_PROMPT,
+        help=f"System prompt for the chat completion (default: {SYSTEM_PROMPT})"
+    )
+
+    parser.add_argument(
+        "--user_prompt", "-u",
+        default=None,
+        help="User prompt for the chat completion (default: [feed contents])"
+    )
+
+    parser.add_argument(
+        "--tokens",
+        default=TOKENS,
+        help=f"Maximum completion tokens to use (default: {TOKENS})"
+    
+    )
+
+    parser.add_argument(
+        "--temperature", "-temp",
+        type=float,
+        default=TEMPERATURE,
+        help=f"Temperature for chat completion (default: {TEMPERATURE})"
+    )
+
+    parser.add_argument(
+        "--model",
+        default=MODEL,
+        help=f"GPT model to use (default: {MODEL})"
+    )
+
+
+    return parser.parse_args()
+
+
+# function to parse the RSS feed and return a list of items
+def feedreader():
+    feed = feedparser.parse(FEED_URL)
+    items = []
+
+    for index, feed_entry in enumerate(feed.entries[:(FEED_SIZE)], start=1):
+        last_item = f"{index} {feed_entry['title']}: {feed_entry['summary']}"
+        items.append(last_item)
+
+    # error check
+    if len(items) != FEED_SIZE:
+        print_debug(2, f"didn't retrive expected items ({FEED_SIZE}) from {FEED_URL}, is the link working?")
+        sys.exit(1)
+
+    print_debug(0, "feed URL parsed")
+    return items
+
+
+# function to generate a chat completion using the OpenAI API
+def chat_completion(
+    _system_prompt=SYSTEM_PROMPT,
+    _user_prompt=None,
+    _tokens=TOKENS,
+    _model=MODEL,
+    _temperature=TEMPERATURE):
+
+    client = OpenAI()
+    messages = [
+        {"role": "system", "content": _system_prompt},
+        {"role": "user", "content": _user_prompt},
+    ]
+
+    try:
+        response = client.chat.completions.create(
+            temperature=_temperature,
+            max_tokens=_tokens,
+            model=_model,
+            messages=messages
+        )
+    except Exception as e:
+        error_message = str(e)
+        print_debug(2, error_message)
+        sys.exit(1)
+
+    content = response.choices[0].message.content
+    completion_tokens = response.usage.completion_tokens
+    prompt_tokens = response.usage.prompt_tokens
+    total_tokens = response.usage.total_tokens
+
+    print_debug(0, f"using {_model} at temperature {_temperature}")
+    print_debug(0, f"cost {total_tokens} tokens ({prompt_tokens} in + {completion_tokens} out) ")
+    return {
+        "content": content,
+        "completion_tokens": completion_tokens,
+        "prompt_tokens": prompt_tokens,
+        "total_tokens": total_tokens
+    }
+
+
+# script entry point
+if __name__ == "__main__":
+    print_debug(0, "modules loaded from venv")
+    args = parse_arguments()
+    print_debug(0, "script args parsed")
+    # set the input to the returned RSS feed items in a string format as required by the OpenAI API
+    user_prompt = args.user_prompt if args.user_prompt is not None else str(feedreader())
+    print_debug(0, "user prompt set")
+
+    try:
+        # generate the chat completion
+        response = chat_completion(
+            _system_prompt=args.system_prompt,
+            _user_prompt=user_prompt,
+            _tokens=args.tokens,
+            _temperature=args.temperature,
+            _model=args.model
+        )
+        output = response["content"]
+        print(output)
+        # send notification with response
+        subprocess.run(["dunstify", "-a", "news-gpt", "--", "Today's news", f"{output}"])
+
+    except Exception as e:
+        print_debug(2, e)
