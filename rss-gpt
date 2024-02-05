@@ -12,11 +12,11 @@ FEED_SIZE = 10
 
 # define request parameters
 SYSTEM_PROMPT = f"""First, consider the top 50 categories on a news website and classify the below headlines.
-Then, read each item, synthesize the most important, relevant information, and provide me a concise one-line list of updates.
+Then, read each item, extract the core meaning from its summary and title, and provide me a concise one-line list of updates.
 Remove titles and avoid the use of colons! Represent categories with a unique emoji.
 Review your reply for maximum brevity before responding!
 Format each line succinctly like this:
-⚔️ The United States has invaded Greenland.
+⚔️ The United States invades Greenland.
 🇫🇷 France have won the World Cup.
 """
 TOKENS = 200
