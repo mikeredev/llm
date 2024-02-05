@@ -11,17 +11,15 @@ FEED_URL = "https://feeds.bbci.co.uk/news/world/rss.xml"
 FEED_SIZE = 10
 
 # define request parameters
-SYSTEM_PROMPT = f"""First, consider the top 50 categories on a news website and classify the below headlines.
-Then, read each item, extract the core meaning from its summary and title, and provide me a concise one-line list of updates.
-Remove titles and avoid the use of colons! Represent categories with a unique emoji.
-Review your reply for maximum brevity before responding!
+SYSTEM_PROMPT = f"""In the persona of an analyst, concisely refactor each item, using one descriptive emoji representing 'topic'.
 Format each line succinctly like this:
 ⚔️ The United States invades Greenland.
 🇫🇷 France have won the World Cup.
+Review these steps and proceed to generate the brief list. Say nothing else.
 """
 TOKENS = 200
 MODEL = "gpt-3.5-turbo"
-TEMPERATURE = 0
+TEMPERATURE = 1.3
 
 
 # function to parse the RSS feed and return a list of items
