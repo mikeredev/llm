@@ -51,15 +51,15 @@ def rofi_run():
     result = subprocess.run(rofi_command, capture_output=True, text=True).stdout.strip()
     return result
 
-
+# main entry point to script
 if __name__ == "__main__":
     user_prompt = rofi_run()
     if not user_prompt:
         print("User canceled. Exiting.")
     else:
-        print(user_prompt)
+        print(f"-> {user_prompt}")
         response = chat_completion(_user_prompt=user_prompt)
         output = response["content"]
-        print(output)
+        print(f"<- {output}")
         dunstify_command = ['dunstify', output, '-a', 'rofi-gpt']
         subprocess.run(dunstify_command)
