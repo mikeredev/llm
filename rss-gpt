@@ -5,27 +5,35 @@
 import feedparser
 from openai import OpenAI
 import subprocess
-import sys
 
 # define how many items to return from which feed
 FEED_URL = "https://feeds.bbci.co.uk/news/world/rss.xml"
-FEED_SIZE = 5
+FEED_SIZE = 10
 
 # define request parameters
-SYSTEM_PROMPT = f"Please summarize these news items in {FEED_SIZE} succinct bullet-points."
+SYSTEM_PROMPT = f"""First, consider the top 50 categories on a news website and classify the below headlines.
+Then, read each item, synthesize the most important, relevant information, and provide me a concise one-line list of updates.
+Remove titles and avoid the use of colons! Represent categories with a unique emoji.
+Review your reply for maximum brevity before responding!
+Format each line succinctly like this:
+⚔️ The United States has invaded Greenland.
+🇫🇷 France have won the World Cup.
+"""
 TOKENS = 200
 MODEL = "gpt-3.5-turbo"
-TEMPERATURE = 0.3
+TEMPERATURE = 0
 
 
 # function to parse the RSS feed and return a list of items
 def feedreader():
     feed = feedparser.parse(FEED_URL)
-
     items = []
+
     for index, feed_entry in enumerate(feed.entries[:(FEED_SIZE)], start=1):
         last_item = f"{index} {feed_entry['title']}: {feed_entry['summary']}"
         items.append(last_item)
+
+    return items
 
 
 # function to generate a chat completion using the OpenAI API
@@ -66,6 +74,7 @@ def chat_completion(
 if __name__ == "__main__":
     # set the user prompt to a string containing the returned RSS items
     user_prompt = str(feedreader())
+
     # generate the completion and send a notification
     response = chat_completion(
         _system_prompt=SYSTEM_PROMPT,
@@ -75,4 +84,5 @@ if __name__ == "__main__":
         _model=MODEL
     )
     output = response["content"]
-    subprocess.run(["dunstify", "-a", "news-gpt", "--", "Today's news", f"{output}"])
+    #cost = response["total_tokens"]
+    subprocess.run(["dunstify", "-a", "news-gpt", "--", f"Today's news", f"{output}"])
