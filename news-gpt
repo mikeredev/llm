@@ -42,18 +42,12 @@ def chat_completion(
         {"role": "user", "content": _user_prompt},
     ]
 
-    try:
-        response = client.chat.completions.create(
-            temperature=_temperature,
-            max_tokens=_tokens,
-            model=_model,
-            messages=messages
-        )
-
-    except Exception as e:
-        error_message = str(e)
-        print_debug(2, error_message)
-        sys.exit(1)
+    response = client.chat.completions.create(
+        temperature=_temperature,
+        max_tokens=_tokens,
+        model=_model,
+        messages=messages
+    )
 
     content = response.choices[0].message.content
     completion_tokens = response.usage.completion_tokens
@@ -73,15 +67,12 @@ if __name__ == "__main__":
     # set the user prompt to a string containing the returned RSS items
     user_prompt = str(feedreader())
     # generate the completion and send a notification
-    try:
-        response = chat_completion(
-            _system_prompt=SYSTEM_PROMPT,
-            _user_prompt=user_prompt,
-            _tokens=TOKENS,
-            _temperature=TEMPERATURE,
-            _model=MODEL
-        )
-        output = response["content"]
-        subprocess.run(["dunstify", "-a", "news-gpt", "--", "Today's news", f"{output}"])
-    except Exception as e:
-        print(e)
+    response = chat_completion(
+        _system_prompt=SYSTEM_PROMPT,
+        _user_prompt=user_prompt,
+        _tokens=TOKENS,
+        _temperature=TEMPERATURE,
+        _model=MODEL
+    )
+    output = response["content"]
+    subprocess.run(["dunstify", "-a", "news-gpt", "--", "Today's news", f"{output}"])
