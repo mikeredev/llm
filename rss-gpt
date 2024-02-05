@@ -24,8 +24,8 @@ Succinctly format each line in approx ten (10) words like this:
 Review these steps and proceed to generate the brief summary. Be brief, yet concise!
 """
 TOKENS = 200
-MODEL = "gpt-3.5-turbo"
 TEMPERATURE = 1
+MODEL = "gpt-3.5-turbo"
 
 
 # function to parse the RSS feed and return a list of items
@@ -87,6 +87,6 @@ if __name__ == "__main__":
         _temperature=TEMPERATURE,
         _model=MODEL
     )
-    output = response["content"]
+    reply = response["content"]
     cost = response["total_tokens"]
-    subprocess.run(["dunstify", "-a", "news-gpt", "--", f"Today's news, for {cost} tokens", f"{output}"])
+    subprocess.run(["dunstify", "-a", "news-gpt", "--", f"Today's news, for {cost} tokens", f"{reply}"])

@@ -1,12 +1,15 @@
 #!venv/bin/python
-# uses: openai 1.10.0, rofi
+# uses: openai 1.10.0, colorama 0.4.6
 
 # import modules
+import argparse
+import platform
+import time
 from openai import OpenAI
-import subprocess
+from colorama import Fore, Style
 
 # define the model settings
-system_prompt = "Be concise and friendly."
+system_prompt = f"Reply briefly as an expert in {platform.system()} {platform.release()}"
 TOKENS = 200
 TEMPERATURE = 1
 MODEL = "gpt-3.5-turbo"
@@ -45,21 +48,17 @@ def chat_completion(
         "total_tokens": total_tokens
     }
 
-# function to run rofi
-def rofi_run():
-    rofi_command = ['rofi', '-dmenu', '-p', '🤖', '-theme', '~/.config/rofi/themes/rofi-gpt']
-    result = subprocess.run(rofi_command, capture_output=True, text=True).stdout.strip()
-    return result
-
 # main entry point to script
 if __name__ == "__main__":
-    user_prompt = rofi_run()
-    if not user_prompt:
-        print("User canceled. Exiting.")
-    else:
-        print(f"-> {user_prompt}")
-        response = chat_completion(_user_prompt=user_prompt)
-        reply = response["content"]
-        print(f"<- {output}")
-        dunstify_command = ['dunstify', reply, '-a', 'rofi-gpt']
-        subprocess.run(dunstify_command)
+    # setup argparse and assign default values
+    parser = argparse.ArgumentParser()
+    parser.add_argument("prompt", type=str)
+    args = parser.parse_args()
+
+    response = chat_completion(_user_prompt=args.prompt)
+    reply = response["content"]
+    print(f"🤖 {Fore.CYAN}", end="")
+    for char in reply:
+        print(char, end="", flush=True)
+        time.sleep(0.005)
+    print(f"{Style.RESET_ALL}")
