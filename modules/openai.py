@@ -2,7 +2,7 @@
 from openai import OpenAI
 
 # function to generate a chat completion using the OpenAI API
-def chat_completion(_system_prompt, _user_prompt, _max_tokens, _model, _temperature):
+def chat_completion(_system_prompt, _user_prompt, _max_tokens, _temperature, _model):
 
     client = OpenAI()
     _messages = [
