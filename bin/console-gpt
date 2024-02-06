@@ -21,15 +21,18 @@ if __name__ == "__main__":
     # setup argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("prompt", type=str)
+    parser.add_argument("--tokens", type=int, default=MAX_TOKENS, help="Maximum number of tokens to generate")
+    parser.add_argument("--temp", type=float, default=TEMPERATURE, help="Control temperature of response")
+    parser.add_argument("--model", type=str, default=MODEL, help="Specify the language model to use")
     args = parser.parse_args()
 
     # generate a completion from the user input
     response = openai.chat_completion(
         _system_prompt=SYSTEM_PROMPT, 
         _user_prompt=args.prompt,
-        _max_tokens=MAX_TOKENS,
-        _temperature=TEMPERATURE,
-        _model=MODEL)
+        _max_tokens=args.tokens,
+        _temperature=args.temp,
+        _model=args.model)
 
     reply = response["content"]
 
