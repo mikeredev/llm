@@ -2,7 +2,9 @@
 # uses: openai 1.10.0, colorama 0.4.6
 
 # import modules
-from modules.openai import chat_completion
+import sys
+sys.path.append('/home/mishi/.config/openai')
+from modules import openai
 from colorama import Fore, Style
 import argparse
 import platform
@@ -22,7 +24,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # generate a completion from the user input
-    response = chat_completion(
+    response = openai.chat_completion(
         _system_prompt=SYSTEM_PROMPT, 
         _user_prompt=args.prompt,
         _max_tokens=MAX_TOKENS,
