@@ -1,4 +1,4 @@
-#!venv/bin/python
+#!/home/mishi/.config/openai/venv/bin/python
 # uses: feedparser 6.0.11, openai 1.10.0
 
 # import modules
