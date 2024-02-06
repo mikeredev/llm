@@ -2,61 +2,36 @@
 # uses: openai 1.10.0, colorama 0.4.6
 
 # import modules
+from modules.openai import chat_completion
+from colorama import Fore, Style
 import argparse
 import platform
 import time
-from openai import OpenAI
-from colorama import Fore, Style
 
-# define the model settings
-system_prompt = f"Reply briefly as an expert in {platform.system()} {platform.release()}"
-TOKENS = 200
-TEMPERATURE = 1
+# define the request parameters
+SYSTEM_PROMPT = f"Concisely execute the grokked user instruction. Environment: {platform.system()} {platform.release()}"
+MAX_TOKENS = 200
+TEMPERATURE = 0
 MODEL = "gpt-3.5-turbo"
-
-# function to generate a chat completion using the OpenAI API
-def chat_completion(
-    _system_prompt=system_prompt,
-    _user_prompt=None,
-    _tokens=TOKENS,
-    _model=MODEL,
-    _temperature=TEMPERATURE
-    ):
-
-    client = OpenAI()
-    messages = [
-        {"role": "system", "content": _system_prompt},
-        {"role": "user", "content": _user_prompt},
-    ]
-
-    response = client.chat.completions.create(
-        temperature=_temperature,
-        max_tokens=_tokens,
-        model=_model,
-        messages=messages
-    )
-
-    content = response.choices[0].message.content
-    completion_tokens = response.usage.completion_tokens
-    prompt_tokens = response.usage.prompt_tokens
-    total_tokens = response.usage.total_tokens
-
-    return {
-        "content": content,
-        "completion_tokens": completion_tokens,
-        "prompt_tokens": prompt_tokens,
-        "total_tokens": total_tokens
-    }
 
 # main entry point to script
 if __name__ == "__main__":
-    # setup argparse and assign default values
+    # setup argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("prompt", type=str)
     args = parser.parse_args()
 
-    response = chat_completion(_user_prompt=args.prompt)
+    # generate a completion from the user input
+    response = chat_completion(
+        _system_prompt=SYSTEM_PROMPT, 
+        _user_prompt=args.prompt,
+        _tokens=MAX_TOKENS,
+        _temperature=TEMPERATURE,
+        _model=MODEL)
+
     reply = response["content"]
+
+    # print output to console
     print(f"🤖 {Fore.CYAN}", end="")
     for char in reply:
         print(char, end="", flush=True)

@@ -2,91 +2,61 @@
 # uses: feedparser 6.0.11, openai 1.10.0
 
 # import modules
+from modules.openai import chat_completion
 import feedparser
-from openai import OpenAI
 import subprocess
+import sys
 
-# define how many items to return from which feed
+# define how many entries to return from which feed
 FEED_URL = "https://feeds.bbci.co.uk/news/world/rss.xml"
 FEED_SIZE = 10
 
-# define request parameters
-SYSTEM_PROMPT = f"""In the persona of an analyst, concisely refactor each of these items, using one (1) representative emoji.
-Ensure to include all key information.
+# define the request parameters - don't set temperature too low or it will just repeat back entry titles
+SYSTEM_PROMPT = f"""This is an RSS news feed. Concisely refactor each of these entries, using one (1) representative emoji for each 'category' (e.g., national flag).
+Ensure to include all key information, e.g., locations, key players, implications understood and highlighted.
 Avoid repeating titles or using colons.
 Succinctly format each line in approx ten (10) words like this:
 ```
-⚔️ Greenland braces itself for the imminent US invasion.
-🇫🇷 A British couple are deported from France, "finally some quiet", says local mayor.
-🐧 Rampaging pengiuns wreak havok on the seaside village of Fishtown, Kent.
+⚔️ Fighting continues in Greenland as the invading US forces push north.
+🇫🇷 The French town of Rouen plays host to the Japanese football team.
+🐧 Zoo officials in Tromso, Norway, hunt sixteen escaped penguins.
 [etc]
 ```
-Review these steps and proceed to generate the brief summary. Be brief, yet concise!
 """
-TOKENS = 200
-TEMPERATURE = 1
+MAX_TOKENS = 300
+TEMPERATURE = 1.4
 MODEL = "gpt-3.5-turbo"
 
 
-# function to parse the RSS feed and return a list of items
+# function to parse the RSS feed and return a list of entries
 def feedreader():
     feed = feedparser.parse(FEED_URL)
     items = []
-
     for index, feed_entry in enumerate(feed.entries[:(FEED_SIZE)], start=1):
-        last_item = f"{index} {feed_entry['title']}: {feed_entry['summary']}"
-        items.append(last_item)
-
+        item = f"Entry {index}: ({feed_entry['title']}): Summary ({feed_entry['summary']})"
+        items.append(item)
+    if (len(items) != FEED_SIZE):
+        print(f"[CRIT] {FEED_URL} did not return expected entries ({FEED_SIZE})")
+        sys.exit(1)
     return items
-
-
-# function to generate a chat completion using the OpenAI API
-def chat_completion(
-    _system_prompt=SYSTEM_PROMPT,
-    _user_prompt=None,
-    _tokens=TOKENS,
-    _model=MODEL,
-    _temperature=TEMPERATURE):
-    client = OpenAI()
-
-    messages = [
-        {"role": "system", "content": _system_prompt},
-        {"role": "user", "content": _user_prompt},
-    ]
-
-    response = client.chat.completions.create(
-        temperature=_temperature,
-        max_tokens=_tokens,
-        model=_model,
-        messages=messages
-    )
-
-    content = response.choices[0].message.content
-    completion_tokens = response.usage.completion_tokens
-    prompt_tokens = response.usage.prompt_tokens
-    total_tokens = response.usage.total_tokens
-
-    return {
-        "content": content,
-        "completion_tokens": completion_tokens,
-        "prompt_tokens": prompt_tokens,
-        "total_tokens": total_tokens
-    }
 
 
 # script entry point
 if __name__ == "__main__":
-    # set the user prompt to a string containing the returned RSS items
+    # set the user prompt to a string containing the returned RSS entries
     user_prompt = str(feedreader())
 
     # generate the completion and send a notification
     response = chat_completion(
         _system_prompt=SYSTEM_PROMPT,
         _user_prompt=user_prompt,
-        _tokens=TOKENS,
+        _tokens=MAX_TOKENS,
         _temperature=TEMPERATURE,
-        _model=MODEL
-    )
+        _model=MODEL)
+
     reply = response["content"]
     cost = response["total_tokens"]
-    subprocess.run(["dunstify", "-a", "news-gpt", "--", f"Today's news, for {cost} tokens", f"{reply}"])
+
+    # display output
+    print(f"[INFO] completion generated for {cost} tokens")
+    subprocess.run(["dunstify", "-a", "news-gpt", "--", f"Today's news", f"{reply}"])

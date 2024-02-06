@@ -2,54 +2,22 @@
 # uses: openai 1.10.0, rofi
 
 # import modules
-from openai import OpenAI
+from modules.openai import chat_completion
 import subprocess
 
-# define the model settings
-system_prompt = "Be concise and friendly."
-TOKENS = 200
+# define the request parameters
+SYSTEM_PROMPT = "Be concise and friendly."
+MAX_TOKENS = 200
 TEMPERATURE = 1
 MODEL = "gpt-3.5-turbo"
 
-# function to generate a chat completion using the OpenAI API
-def chat_completion(
-    _system_prompt=system_prompt,
-    _user_prompt=None,
-    _tokens=TOKENS,
-    _model=MODEL,
-    _temperature=TEMPERATURE
-    ):
-
-    client = OpenAI()
-    messages = [
-        {"role": "system", "content": _system_prompt},
-        {"role": "user", "content": _user_prompt},
-    ]
-
-    response = client.chat.completions.create(
-        temperature=_temperature,
-        max_tokens=_tokens,
-        model=_model,
-        messages=messages
-    )
-
-    content = response.choices[0].message.content
-    completion_tokens = response.usage.completion_tokens
-    prompt_tokens = response.usage.prompt_tokens
-    total_tokens = response.usage.total_tokens
-
-    return {
-        "content": content,
-        "completion_tokens": completion_tokens,
-        "prompt_tokens": prompt_tokens,
-        "total_tokens": total_tokens
-    }
 
 # function to run rofi
 def rofi_run():
     rofi_command = ['rofi', '-dmenu', '-p', '🤖', '-theme', '~/.config/rofi/themes/rofi-gpt']
     result = subprocess.run(rofi_command, capture_output=True, text=True).stdout.strip()
     return result
+
 
 # main entry point to script
 if __name__ == "__main__":
@@ -58,8 +26,13 @@ if __name__ == "__main__":
         print("User canceled. Exiting.")
     else:
         print(f"-> {user_prompt}")
-        response = chat_completion(_user_prompt=user_prompt)
+        response = chat_completion(
+            _system_prompt=SYSTEM_PROMPT,
+            _user_prompt=user_prompt,
+            _tokens=MAX_TOKENS,
+            _temperature=TEMPERATURE,
+            _model=MODEL)
         reply = response["content"]
-        print(f"<- {output}")
+        print(f"<- {reply}")
         dunstify_command = ['dunstify', reply, '-a', 'rofi-gpt']
         subprocess.run(dunstify_command)
