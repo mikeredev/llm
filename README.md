@@ -1,4 +1,12 @@
-#### OpenAI chatbots
+### Setup
+```bash
+cd /path/to/this/repo
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+
+### OpenAI chatbots
 
 | script                   | description                                     | screenshot |
 |:-------------------------|:------------------------------------------------|:-----------|
@@ -10,14 +18,14 @@
 | gpt-news                 | parses and summarises an RSS feed               |[link](https://github.com/mikeredev/openai/assets/132297919/e57d5172-c82a-4e54-be73-8319e8dbae80)|
 
 ### Quick Notes
-gpt-chatbot-console - create chat completions from console. useful for sysadmin tasks/quick queries.
+console-gpt - create chat completions from console. useful for sysadmin tasks/quick queries
 
-gpt-chatbot-conversation - appends previous chats to the history for contextual awareness.
+gpt-chatbot-conversation - appends previous chats to the history for contextual awareness
 
 gpt-chatbot-gui-ctkinter - an SMS-like chat interface
 
 gpt-chatbot-pinecone - summarises conversations into "memories" and adds to a vector database (similar to: [2308.15022](https://arxiv.org/abs/2308.15022))
 
-gpt-chatbot-rofi  - similar to gpt-chatbot-console but runs in the rofi menu
+rofi-gpy  - similar to gpt-chatbot-console but runs in the rofi menu
 
-gpt-news - can be used to summarise any RSS feed, although the prompt is designed for parsing BBC News (e.g., removing author names, publication titles, etc., from final output)
+rss-gpt - summarise an RSS feed and provide a digest
