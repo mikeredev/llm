@@ -20,10 +20,10 @@ MODEL = "gpt-3.5-turbo"
 if __name__ == "__main__":
     # setup argparse
     parser = argparse.ArgumentParser()
-    parser.add_argument("prompt", type=str)
-    parser.add_argument("--tokens", type=int, default=MAX_TOKENS, help="Maximum number of tokens to generate")
-    parser.add_argument("--temp", type=float, default=TEMPERATURE, help="Control temperature of response")
-    parser.add_argument("--model", type=str, default=MODEL, help="Specify the language model to use")
+    parser.add_argument("prompt", type=str, help="enter your query")
+    parser.add_argument("--tokens", type=int, default=MAX_TOKENS, help="maximum number of tokens to generate")
+    parser.add_argument("--temp", type=float, default=TEMPERATURE, help="set temperature of response")
+    parser.add_argument("--model", type=str, default=MODEL, help="specify the language model to use")
     args = parser.parse_args()
 
     # generate a completion from the user input
