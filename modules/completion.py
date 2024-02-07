@@ -4,6 +4,7 @@ class Completion:
     def __init__(self):
         self.client = OpenAI()
 
+    # function to generate a chat completion
     def generate(self, _system_prompt, _user_prompt, _max_tokens, _temperature, _model):
         _messages = [
             {"role": "system", "content": _system_prompt},
