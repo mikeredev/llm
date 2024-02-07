@@ -9,7 +9,7 @@ from colorama import Fore, Style
 import time
 
 # vars
-SYSTEM_PROMPT="Horrorshow! Speak curtly and briefly in Nadsat, my droog."
+SYSTEM_PROMPT="Reply in 15 words maximum."
 MAX_HISTORY = 5
 
 # instantiate objects
@@ -17,6 +17,7 @@ chat=conversation.Conversation()
 
 # set system prompt
 chat.update_payload("system", SYSTEM_PROMPT)
+print(f"System prompt: {SYSTEM_PROMPT}")
 chat.token_counter = 0
 chat.message_counter = 0
 
@@ -34,8 +35,7 @@ while True:
         _user_prompt=user_prompt,
         _max_tokens=50,
         _temperature=1,
-        _model="gpt-3.5-turbo",
-        _messages=chat._messages)
+        _model="gpt-3.5-turbo")
     reply = response["content"]
     tokens = response["total_tokens"]
 

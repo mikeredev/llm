@@ -6,7 +6,7 @@ class Conversation():
         self._messages = []
 
     # function to generate a chat completion
-    def generate(self, _system_prompt, _user_prompt, _max_tokens, _temperature, _model, _messages):
+    def generate(self, _system_prompt, _user_prompt, _max_tokens, _temperature, _model):
         _response = self.client.chat.completions.create(
             max_tokens=_max_tokens,
             temperature=_temperature,
