@@ -27,7 +27,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # generate a completion from the user input
-    response = openai.chat_completion(
+    completion = openai.Completion()
+    response = completion.generate(
         _system_prompt=SYSTEM_PROMPT, 
         _user_prompt=args.prompt,
         _max_tokens=args.tokens,

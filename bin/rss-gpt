@@ -32,14 +32,20 @@ MODEL = "gpt-3.5-turbo"
 
 # function to parse the RSS feed and return a list of entries
 def feedreader():
+    # parse RSS feed
     feed = feedparser.parse(FEED_URL)
+
+    # store returned entries in list
     items = []
     for index, feed_entry in enumerate(feed.entries[:(FEED_SIZE)], start=1):
         item = f"Entry {index}: ({feed_entry['title']}): Summary ({feed_entry['summary']})"
         items.append(item)
+    
+    # error check
     if (len(items) != FEED_SIZE):
         print(f"[CRIT] {FEED_URL} did not return expected entries ({FEED_SIZE})")
         sys.exit(1)
+
     return items
 
 
@@ -48,17 +54,19 @@ if __name__ == "__main__":
     # set the user prompt to a string containing the returned RSS entries
     user_prompt = str(feedreader())
 
-    # generate the completion and send a notification
-    response = openai.chat_completion(
+    # generate the completion
+    completion = openai.Completion()
+    response = completion.generate(
         _system_prompt=SYSTEM_PROMPT,
         _user_prompt=user_prompt,
         _max_tokens=MAX_TOKENS,
         _temperature=TEMPERATURE,
         _model=MODEL)
 
+    # store output
     reply = response["content"]
     cost = response["total_tokens"]
 
-    # display output
+    # display notification with the response
     print(f"[INFO] completion generated for {cost} tokens")
     subprocess.run(["dunstify", "-a", "news-gpt", "--", f"Today's news", f"{reply}"])

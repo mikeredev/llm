@@ -23,18 +23,25 @@ def rofi_run():
 
 # main entry point to script
 if __name__ == "__main__":
+    # set the user prompt to the rofi input
     user_prompt = rofi_run()
     if not user_prompt:
         print("User canceled. Exiting.")
     else:
-        print(f"-> {user_prompt}")
-        response = openai.chat_completion(
+        # generate chat completion
+        print(f"{user_prompt}")
+        completion = openai.Completion()
+        response = completion.generate(
             _system_prompt=SYSTEM_PROMPT,
             _user_prompt=user_prompt,
             _max_tokens=MAX_TOKENS,
             _temperature=TEMPERATURE,
             _model=MODEL)
+
+        # display output
         reply = response["content"]
-        print(f"<- {reply}")
+        print(f"{reply}")
+
+        # send notification with response
         dunstify_command = ['dunstify', reply, '-a', 'rofi-gpt']
         subprocess.run(dunstify_command)
