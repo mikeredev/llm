@@ -2,13 +2,13 @@
 # uses: openai 1.10.0, colorama 0.4.6
 
 # import modules
-import sys
-sys.path.append('/home/mishi/.config/openai')
-from modules import openai
-from colorama import Fore, Style
 import argparse
 import platform
 import time
+import sys
+sys.path.append('/home/mishi/.config/openai')
+from modules import completion
+from colorama import Fore, Style
 
 # define the request parameters
 SYSTEM_PROMPT = f"Concisely execute the grokked user instruction. Environment: {platform.system()} {platform.release()}"
@@ -26,15 +26,16 @@ if __name__ == "__main__":
     parser.add_argument("--model", type=str, default=MODEL, help="specify the language model to use")
     args = parser.parse_args()
 
-    # generate a completion from the user input
-    completion = openai.Completion()
-    response = completion.generate(
+    # instantiate the new completion object
+    chat = completion.Completion()
+
+    # generate chat completion from user input
+    response = chat.generate(
         _system_prompt=SYSTEM_PROMPT, 
         _user_prompt=args.prompt,
         _max_tokens=args.tokens,
         _temperature=args.temp,
         _model=args.model)
-
     reply = response["content"]
 
     # print output to console

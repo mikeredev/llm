@@ -2,10 +2,10 @@
 # uses: openai 1.10.0, rofi
 
 # import modules
+import subprocess
 import sys
 sys.path.append('/home/mishi/.config/openai')
-from modules import openai
-import subprocess
+from modules import completion
 
 # define the request parameters
 SYSTEM_PROMPT = "Be concise and friendly."
@@ -28,10 +28,14 @@ if __name__ == "__main__":
     if not user_prompt:
         print("User canceled. Exiting.")
     else:
-        # generate chat completion
+        # display user input
         print(f"{user_prompt}")
-        completion = openai.Completion()
-        response = completion.generate(
+
+        # instantiate the new completion object
+        chat = completion.Completion()
+
+        # generate chat completion
+        response = chat.generate(
             _system_prompt=SYSTEM_PROMPT,
             _user_prompt=user_prompt,
             _max_tokens=MAX_TOKENS,

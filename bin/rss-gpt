@@ -2,12 +2,11 @@
 # uses: feedparser 6.0.11, openai 1.10.0
 
 # import modules
-import sys
-sys.path.append('/home/mishi/.config/openai')
-from modules import openai
-import feedparser
 import subprocess
 import sys
+import feedparser
+sys.path.append('/home/mishi/.config/openai')
+from modules import completion
 
 # define how many entries to return from which feed
 FEED_URL = "https://feeds.bbci.co.uk/news/world/rss.xml"
@@ -54,9 +53,11 @@ if __name__ == "__main__":
     # set the user prompt to a string containing the returned RSS entries
     user_prompt = str(feedreader())
 
+    # instantiate the new completion object
+    chat = completion.Completion()
+    
     # generate the completion
-    completion = openai.Completion()
-    response = completion.generate(
+    response = chat.generate(
         _system_prompt=SYSTEM_PROMPT,
         _user_prompt=user_prompt,
         _max_tokens=MAX_TOKENS,
