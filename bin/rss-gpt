@@ -70,4 +70,4 @@ if __name__ == "__main__":
 
     # display notification with the response
     print(f"[INFO] completion generated for {cost} tokens")
-    subprocess.run(["dunstify", "-a", "news-gpt", "--", f"Today's news", f"{reply}"])
+    subprocess.run(["dunstify", "-a", "rss-gpt", "--", f"Today's news", f"{reply}"])
