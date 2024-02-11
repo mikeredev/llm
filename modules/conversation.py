@@ -18,7 +18,6 @@ class Conversation():
         _prompt_tokens = _response.usage.prompt_tokens
         _completion_tokens = _response.usage.completion_tokens
         _total_tokens = _response.usage.total_tokens
-
         return {
             "content": _content,
             "prompt_tokens": _prompt_tokens,
@@ -43,6 +42,6 @@ class Conversation():
 
     # function to prune earliest User and Assistant entries (system prompt is at index 0)
     def prune_history(self, size):
-        if len(self._messages) > size:
+        if len(self._messages) >= size:
             self._messages.pop(1)
             self._messages.pop(1)
