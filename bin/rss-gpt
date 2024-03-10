@@ -6,7 +6,7 @@ import subprocess
 import sys
 import feedparser
 sys.path.append('/home/mishi/.config/openai')
-from modules import completion
+from modules import anthropic
 
 # define how many entries to return from which feed
 FEED_URL = "https://feeds.bbci.co.uk/news/world/rss.xml"
@@ -25,8 +25,8 @@ Succinctly format each line in approx ten (10) words like this:
 ```
 """
 MAX_TOKENS = 300
-TEMPERATURE = 1.4
-MODEL = "gpt-3.5-turbo"
+TEMPERATURE = 1
+MODEL = "claude-3-opus-20240229"
 
 
 # function to parse the RSS feed and return a list of entries
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     user_prompt = str(feedreader())
 
     # instantiate the new completion object
-    chat = completion.Completion()
+    chat = anthropic.Completion()
     
     # generate the completion
     response = chat.generate(
@@ -66,8 +66,7 @@ if __name__ == "__main__":
 
     # store output
     reply = response["content"]
-    cost = response["total_tokens"]
 
     # display notification with the response
-    print(f"[INFO] completion generated for {cost} tokens")
+    print(f"[INFO] completion generated")
     subprocess.run(["dunstify", "-a", "rss-gpt", "--", f"Today's news", f"{reply}"])
