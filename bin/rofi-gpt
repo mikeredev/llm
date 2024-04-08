@@ -1,10 +1,10 @@
-#!/home/mishi/.config/openai/venv/bin/python
+#!/home/mishi/.config/llm/venv/bin/python
 # uses: openai 1.10.0, rofi
 
 # import modules
 import subprocess
 import sys
-sys.path.append('/home/mishi/.config/openai')
+sys.path.append('/home/mishi/.config/llm')
 from modules import completion
 
 # define the request parameters

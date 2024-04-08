@@ -1,11 +1,11 @@
-#!/home/mishi/.config/openai/venv/bin/python
+#!/home/mishi/.config/llm/venv/bin/python
 # uses: feedparser 6.0.11, openai 1.10.0
 
 # import modules
 import subprocess
 import sys
 import feedparser
-sys.path.append('/home/mishi/.config/openai')
+sys.path.append('/home/mishi/.config/llm')
 from modules import anthropic
 
 # define how many entries to return from which feed

@@ -1,4 +1,4 @@
-#!/home/mishi/.config/openai/venv/bin/python
+#!/home/mishi/.config/llm/venv/bin/python
 # uses: openai 1.10.0, colorama 0.4.6
 
 # import modules
@@ -6,7 +6,7 @@ import argparse
 import platform
 import time
 import sys
-sys.path.append('/home/mishi/.config/openai')
+sys.path.append('/home/mishi/.config/llm')
 from modules import completion
 from colorama import Fore, Style
 
