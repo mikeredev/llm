@@ -19,7 +19,13 @@ class Completion:
         )
 
         _content = _response.content[0].text
+        _input_tokens = _response.usage.input_tokens
+        _output_tokens = _response.usage.output_tokens
+        _total_tokens = _input_tokens + _output_tokens
 
         return {
-            "content": _content
+            "content": _content,
+            "prompt_tokens": _input_tokens,
+            "completion_tokens": _output_tokens,
+            "total_tokens": _total_tokens
         }
