@@ -1,5 +1,5 @@
 #!/home/mishi/.config/bash/scripts/llmvenv
-# uses: feedparser 6.0.11, openai 1.10.0
+# uses: feedparser openai
 
 # import modules
 import os

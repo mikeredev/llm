@@ -1,25 +1,24 @@
 #!/home/mishi/.config/bash/scripts/llmvenv
-# uses: openai 1.10.0, rofi
+# uses: openai rofi dunst
 
 # import modules
+import os
 import subprocess
 import sys
 sys.path.append('/home/mishi/.config/llm')
 from modules.openai import completion
 
 # define the request parameters
-SYSTEM_PROMPT = "Be concise and friendly."
-MAX_TOKENS = 200
+MODEL = os.environ.get('OPENAI_GPT35')
 TEMPERATURE = 1
-MODEL = "gpt-3.5-turbo"
-
+MAX_TOKENS = 200
+SYSTEM_PROMPT = "Be concise and friendly."
 
 # function to run rofi
 def rofi_run():
-    rofi_command = ['rofi', '-dmenu', '-p', '🤖', '-theme', '~/.config/rofi/themes/rofi-gpt']
+    rofi_command = ['rofi', '-dmenu', '-p', '🤖', '-theme', 'rofibot']
     result = subprocess.run(rofi_command, capture_output=True, text=True).stdout.strip()
     return result
-
 
 # main entry point to script
 if __name__ == "__main__":
@@ -31,10 +30,8 @@ if __name__ == "__main__":
         # display user input
         print(f"{user_prompt}")
 
-        # instantiate the new completion object
-        chat = completion.Completion()
-
         # generate chat completion
+        chat = completion.Completion()
         response = chat.generate(
             _system_prompt=SYSTEM_PROMPT,
             _user_prompt=user_prompt,
@@ -44,8 +41,8 @@ if __name__ == "__main__":
 
         # display output
         reply = response["content"]
-        print(f"{reply}")
+        print(f"> {reply}")
 
-        # send notification with response
-        dunstify_command = ['dunstify', reply, '-a', 'rofi-gpt']
+        # send notification
+        dunstify_command = ['dunstify', 'Bot reply', reply, '-a', 'rofibot']
         subprocess.run(dunstify_command)
