@@ -1,7 +1,8 @@
-#!/home/mishi/.config/llm/venv/bin/python
+#!/home/mishi/.config/bash/scripts/llmvenv
 # uses: feedparser 6.0.11, openai 1.10.0
 
 # import modules
+import os
 import subprocess
 import sys
 import feedparser
@@ -10,9 +11,14 @@ from modules.anthropic import completion
 
 # define how many entries to return from which feed
 FEED_URL = "https://feeds.bbci.co.uk/news/world/rss.xml"
-FEED_SIZE = 5
+FEED_SIZE = 2
 
-# define the request parameters - don't set temperature too low or it will just repeat back entry titles
+# define the request parameters
+# don't set temperature too low or it will just repeat back entry titles
+MODEL = os.environ.get('CLAUDE_HAIKU')
+TEMPERATURE = 1
+MAX_TOKENS = 300
+
 SYSTEM_PROMPT = f"""This is an RSS news feed. Concisely refactor each of these entries, using one (1) representative emoji for each 'category' (e.g., national flag).
 Ensure to include all key information, e.g., locations, key players, implications understood and highlighted.
 Avoid repeating titles or using colons.
@@ -22,15 +28,10 @@ Succinctly format each line in approx ten (10) words like this:
 🇫🇷 The French town of Rouen plays host to the Japanese football team.
 🐧 Zoo officials in Tromso, Norway, hunt sixteen escaped penguins.
 [etc]
-```
-"""
-MAX_TOKENS = 300
-TEMPERATURE = 1
-MODEL = "claude-3-haiku-20240307"
-
+```"""
 
 # function to parse the RSS feed and return a list of entries
-def feedreader():
+def rss_reader():
     # parse RSS feed
     feed = feedparser.parse(FEED_URL)
 
@@ -47,11 +48,10 @@ def feedreader():
 
     return items
 
-
-# script entry point
+# main entry point to script
 if __name__ == "__main__":
     # set the user prompt to a string containing the returned RSS entries
-    user_prompt = str(feedreader())
+    USER_PROMPT = str(rss_reader())
 
     # instantiate the new completion object
     chat = completion.Completion()
@@ -59,14 +59,16 @@ if __name__ == "__main__":
     # generate the completion
     response = chat.generate(
         _system_prompt=SYSTEM_PROMPT,
-        _user_prompt=user_prompt,
+        _user_prompt=USER_PROMPT,
         _max_tokens=MAX_TOKENS,
         _temperature=TEMPERATURE,
         _model=MODEL)
 
     # store output
     reply = response["content"]
+    tokens = response["total_tokens"]
 
     # display notification with the response
-    print(f"[INFO] completion generated")
-    subprocess.run(["dunstify", "-a", "rss-gpt", "--", f"Today's news", f"{reply}"])
+    title = f"Today's news for {tokens} tokens"
+    print(f"{title}:\n{reply}")
+    subprocess.run(["dunstify", "-a", "rss-reader", "--", f"{title}", f"{reply}"])
