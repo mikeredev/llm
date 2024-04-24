@@ -1,5 +1,5 @@
 #!/home/mishi/.config/bash/scripts/llmvenv
-# uses: feedparser openai
+# uses: anthropic feedparser rofi
 
 # import modules
 import os
@@ -11,7 +11,7 @@ from modules.anthropic import completion
 
 # define how many entries to return from which feed
 FEED_URL = "https://feeds.bbci.co.uk/news/world/rss.xml"
-FEED_SIZE = 2
+FEED_SIZE = 5
 
 # define the request parameters
 # don't set temperature too low or it will just repeat back entry titles
@@ -53,10 +53,8 @@ if __name__ == "__main__":
     # set the user prompt to a string containing the returned RSS entries
     USER_PROMPT = str(rss_reader())
 
-    # instantiate the new completion object
-    chat = completion.Completion()
-    
     # generate the completion
+    chat = completion.Completion()
     response = chat.generate(
         _system_prompt=SYSTEM_PROMPT,
         _user_prompt=USER_PROMPT,
@@ -68,7 +66,13 @@ if __name__ == "__main__":
     reply = response["content"]
     tokens = response["total_tokens"]
 
-    # display notification with the response
+    # construct output for rofi
+    replies = reply.split('\n')
+    replies_rofi = "\n".join(replies)
+
+    # return output
     title = f"Today's news for {tokens} tokens"
     print(f"{title}:\n{reply}")
-    subprocess.run(["dunstify", "-a", "rss-reader", "--", f"{title}", f"{reply}"])
+
+    rofi_command = f'rofi -dmenu -p "{title}" <<< "{replies_rofi}"'
+    subprocess.run(rofi_command, shell=True)
