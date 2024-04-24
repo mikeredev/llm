@@ -5,7 +5,7 @@
 | ```modules/openai/completion.py```    | generate a single completion via gpt | |
 | ```modules/openai/conversation.py```  | contextually-aware conversation, history pruning | |
 | ```scripts/bots/claude.py```          | generate a single completion via claude | |
-| ```scripts/bots/gpt.pt```             | generate a single completion via gpt | |
+| ```scripts/bots/gpt.py```             | generate a single completion via gpt | |
 | ```scripts/poc/chat.py```             | contextually-aware conversation, history pruning | |
 | ```scripts/poc/customtkinter.py```    | SMS-like chatbot GUI |  |
 | ```scripts/poc/infinite-craft.py```   | explore chain-of-thought planning and reasoning for [```infinite craft```](https://neal.fun/infinite-craft) game | |
