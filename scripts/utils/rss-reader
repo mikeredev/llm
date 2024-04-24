@@ -6,11 +6,11 @@ import subprocess
 import sys
 import feedparser
 sys.path.append('/home/mishi/.config/llm')
-from modules import anthropic
+from modules.anthropic import completion
 
 # define how many entries to return from which feed
 FEED_URL = "https://feeds.bbci.co.uk/news/world/rss.xml"
-FEED_SIZE = 10
+FEED_SIZE = 5
 
 # define the request parameters - don't set temperature too low or it will just repeat back entry titles
 SYSTEM_PROMPT = f"""This is an RSS news feed. Concisely refactor each of these entries, using one (1) representative emoji for each 'category' (e.g., national flag).
@@ -54,7 +54,7 @@ if __name__ == "__main__":
     user_prompt = str(feedreader())
 
     # instantiate the new completion object
-    chat = anthropic.Completion()
+    chat = completion.Completion()
     
     # generate the completion
     response = chat.generate(

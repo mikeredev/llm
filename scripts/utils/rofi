@@ -5,7 +5,7 @@
 import subprocess
 import sys
 sys.path.append('/home/mishi/.config/llm')
-from modules import completion
+from modules.openai import completion
 
 # define the request parameters
 SYSTEM_PROMPT = "Be concise and friendly."

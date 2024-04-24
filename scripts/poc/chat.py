@@ -4,7 +4,7 @@
 # import modules
 import sys
 sys.path.append('/home/mishi/.config/llm')
-from modules import conversation
+from modules.openai import conversation
 from colorama import Fore, Style
 import time
 

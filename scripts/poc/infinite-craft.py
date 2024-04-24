@@ -1,11 +1,12 @@
 #!/home/mishi/.config/llm/venv/bin/python
 # uses: openai 1.10.0, colorama 0.4.6
+# https://neal.fun/infinite-craft/
 
 # import modules
 import sys
 import re
 sys.path.append('/home/mishi/.config/llm')
-from modules import conversation
+from modules.openai import conversation
 from colorama import Fore, Style
 import time
 
