@@ -5,7 +5,7 @@ class Completion():
     def __init__(self):
         self.co = cohere.Client(os.getenv("COHERE_API_KEY"))
 
-    def generate(self, _system_prompt=None, _user_prompt=None, _max_tokens=None, _temperature=None, _model=None):
+    def generate(self, _system_prompt, _user_prompt, _max_tokens, _temperature, _model):
         response = self.co.chat(
             message=_user_prompt,
             model=_model,
