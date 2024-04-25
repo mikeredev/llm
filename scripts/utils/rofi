@@ -1,4 +1,4 @@
-#!/home/mishi/.config/bash/scripts/llmvenv
+#!/home/mishi/.config/bash/scripts/llmvenv-py
 # uses: openai rofi dunst
 
 # import modules
