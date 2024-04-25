@@ -18,7 +18,8 @@ model_env_mapping = {
     "gpt-4": "GPT_4",
     "haiku": "CLAUDE_HAIKU",
     "sonnet": "CLAUDE_SONNET",
-    "opus": "CLAUDE_OPUS"
+    "opus": "CLAUDE_OPUS",
+    "command-r-plus": "COHERE_CMDR_PLUS"
 }
 
 # define the default system prompt. includes platform details to prime the bot's reply
@@ -46,7 +47,7 @@ def set_argparse():
 # function to load module from modules/[vendor]/completion.py
 def get_module(model):
     # determine vendor based on model name
-    vendor = "openai" if "gpt-" in  model else "anthropic"
+    vendor = "openai" if "gpt-" in  model else "cohere" if "command-" in model else "anthropic"
     # construct module path based on vendor
     sys.path.append('/home/mishi/.config/llm')
     _module_path = f"modules.{vendor}.completion"
