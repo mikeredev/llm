@@ -1,10 +1,12 @@
 #!/home/mishi/.config/bash/scripts/llmvenv-py
-# uses: openai rofi dunst
+# uses: rofi dunst
 
 # import modules
 import os
 import subprocess
 import sys
+
+# import custom modules
 sys.path.append('/home/mishi/.config/llm')
 from modules.openai import completion
 

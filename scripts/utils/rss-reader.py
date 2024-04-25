@@ -1,13 +1,15 @@
 #!/home/mishi/.config/bash/scripts/llmvenv-py
-# uses: anthropic feedparser rofi
+# uses: feedparser rofi
 
 # import modules
 import os
 import subprocess
 import sys
+
+# import custom modules
 import feedparser
 sys.path.append('/home/mishi/.config/llm')
-from modules.anthropic import completion
+from modules.cohere import completion
 
 # define how many entries to return from which feed
 FEED_URL = "https://feeds.bbci.co.uk/news/world/rss.xml"
@@ -15,20 +17,21 @@ FEED_SIZE = 5
 
 # define the request parameters
 # don't set temperature too low or it will just repeat back entry titles
-MODEL = os.environ.get('CLAUDE_HAIKU')
-TEMPERATURE = 1
+MODEL = os.environ.get('COHERE_CMDR_PLUS')
+TEMPERATURE = 0.5
 MAX_TOKENS = 300
 
 SYSTEM_PROMPT = f"""This is an RSS news feed. Concisely refactor each of these entries, using one (1) representative emoji for each 'category' (e.g., national flag).
 Ensure to include all key information, e.g., locations, key players, implications understood and highlighted.
 Avoid repeating titles or using colons.
 Succinctly format each line in approx ten (10) words like this:
-```
+``` example
 ⚔️ Fighting continues in Greenland as the invading US forces push north.
 🇫🇷 The French town of Rouen plays host to the Japanese football team.
 🐧 Zoo officials in Tromso, Norway, hunt sixteen escaped penguins.
 [etc]
-```"""
+```
+Include no outside text or additional commentary."""
 
 # function to parse the RSS feed and return a list of entries
 def rss_reader():
@@ -66,13 +69,18 @@ if __name__ == "__main__":
     reply = response["content"]
     tokens = response["total_tokens"]
 
-    # construct output for rofi
+    # split reply string into individual lines for rofi
     replies = reply.split('\n')
+    # remove any empty lines from output
+    replies = [line.strip() for line in replies if line.strip()]
+    # join the non-blank lines with newline characters
     replies_rofi = "\n".join(replies)
 
-    # return output
+    # set title of notification/response
     title = f"Today's news for {tokens} tokens"
-    print(f"{title}:\n{reply}")
+    # display output in console
+    print(f"{title}:\n{replies_rofi}")
 
+    # display output using rofi
     rofi_command = f'rofi -dmenu -p "{title}" <<< "{replies_rofi}"'
     subprocess.run(rofi_command, shell=True)

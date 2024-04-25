@@ -11,5 +11,5 @@
 | [```scripts/poc/infinite-craft.py```](https://github.com/mikeredev/llm/blob/main/scripts/poc/infinite-craft.py) | explore chain-of-thought planning and reasoning for [```infinite craft```](https://neal.fun/infinite-craft) game | |
 | [```scripts/poc/pinecone.py```](https://github.com/mikeredev/llm/blob/main/scripts/poc/pinecone.py) | summarize conversations, pinecone RAG | [```2308.15022```](https://arxiv.org/abs/2308.15022) |
 | [```scripts/prompts/chaos-gpt.py```](https://github.com/mikeredev/llm/blob/main/scripts/prompts/chaos-gpt.py) | instantiate a character & explore built-in biases | |
-| [```scripts/utils/rofi.py```](https://github.com/mikeredev/llm/blob/main/scripts/utils/rofi) | generate a single completion using rofi interface | |
-| [```scripts/utils/rss-reader.py```](https://github.com/mikeredev/llm/blob/main/scripts/utils/rss-reader) | parse and summarise an RSS feed | |
+| [```scripts/utils/rofi.py```](https://github.com/mikeredev/llm/blob/main/scripts/utils/rofi.py) | generate a single completion using rofi interface | |
+| [```scripts/utils/rss-reader.py```](https://github.com/mikeredev/llm/blob/main/scripts/utils/rss-reader.py) | parse and summarise an RSS feed | |
