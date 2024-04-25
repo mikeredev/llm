@@ -1,4 +1,4 @@
-#!/home/mishi/.config/bash/scripts/llmvenv
+#!/home/mishi/.config/bash/scripts/llmvenv-py
 
 # import standard modules
 import argparse
