@@ -4,8 +4,6 @@
 | [```modules/anthropic/completion.py```](https://github.com/mikeredev/llm/blob/main/modules/anthropic/completion.py) | generate a single completion using claude | |
 | [```modules/openai/completion.py```](https://github.com/mikeredev/llm/blob/main/modules/openai/completion.py)    | generate a single completion using gpt | |
 | [```modules/openai/conversation.py```](https://github.com/mikeredev/llm/blob/main/modules/openai/conversation.py)  | contextually-aware conversation, history pruning | |
-| [```scripts/bots/claude.py```](https://github.com/mikeredev/llm/blob/main/scripts/bots/claude) | generate a single completion using claude | |
-| [```scripts/bots/gpt.py```](https://github.com/mikeredev/llm/blob/main/scripts/bots/gpt) | generate a single completion using gpt | |
 | [```scripts/bots/console.py```](https://github.com/mikeredev/llm/blob/main/scripts/bots/console.py) | CLI interface supporting multiple language models | |
 | [```scripts/poc/chat.py```](https://github.com/mikeredev/llm/blob/main/scripts/poc/chat.py) | contextually-aware conversation, history pruning | |
 | [```scripts/poc/customtkinter.py```](https://github.com/mikeredev/llm/blob/main/scripts/poc/customtkinter.py) | SMS-like chatbot GUI |  |
