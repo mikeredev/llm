@@ -9,7 +9,7 @@ sys.path.append('/home/mishi/.config/llm')
 from modules.openai import completion
 
 # define the request parameters
-MODEL = os.environ.get('OPENAI_GPT35')
+MODEL = os.environ.get('OPENAI_GPT_3_5')
 TEMPERATURE = 1
 MAX_TOKENS = 200
 SYSTEM_PROMPT = "Be concise and friendly."
