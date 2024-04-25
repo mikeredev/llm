@@ -16,9 +16,9 @@ from colorama import Fore, Style
 model_env_mapping = {
     "gpt-3.5": "GPT_3_5",
     "gpt-4": "GPT_4",
-    "claude-haiku": "CLAUDE_HAIKU",
-    "claude-sonnet": "CLAUDE_SONNET",
-    "claude-opus": "CLAUDE_OPUS"
+    "haiku": "CLAUDE_HAIKU",
+    "sonnet": "CLAUDE_SONNET",
+    "opus": "CLAUDE_OPUS"
 }
 
 # define the default system prompt. includes platform details to prime the bot's reply
@@ -46,7 +46,7 @@ def set_argparse():
 # function to load module from modules/[vendor]/completion.py
 def get_module(model):
     # determine vendor based on model name
-    vendor = "openai" if "gpt-" in model else "anthropic" if "claude-" in model else None
+    vendor = "openai" if "gpt-" in  model else "anthropic"
     # construct module path based on vendor
     sys.path.append('/home/mishi/.config/llm')
     _module_path = f"modules.{vendor}.completion"
