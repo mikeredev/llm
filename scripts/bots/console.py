@@ -11,9 +11,6 @@ import time
 # import custom modules
 from colorama import Fore, Style
 
-# configure logging
-logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
-
 # map model names to environment variables
 # env variables should hold model names, e.g., `export CLAUDE_OPUS="claude-3-opus-20240229"`
 model_env_mapping = {
@@ -24,18 +21,25 @@ model_env_mapping = {
     "claude-opus": "CLAUDE_OPUS"
 }
 
-# define the default system prompt. includes platform details to prime bot's reply
+# define the default system prompt. includes platform details to prime the bot's reply
 system_prompt = f"Concisely execute the grokked user instruction. Environment: {platform.system()} {platform.release()}"
 
 
 # function to set script arguments with argparse
 def set_argparse():
     parser = argparse.ArgumentParser()
-    parser.add_argument("prompt")
-    parser.add_argument("--model", default="gpt-3.5", choices=model_env_mapping.keys())
-    parser.add_argument("--temp", default=1.0, type=float)
-    parser.add_argument("--tokens", default=100, type=int)
-    parser.add_argument("--system-prompt", default=system_prompt)
+    parser.add_argument("prompt", \
+        help = "enter your prompt or query")
+    parser.add_argument("--model", default="gpt-3.5", choices=model_env_mapping.keys(), \
+        help = "specify model (default gpt-3.5)")
+    parser.add_argument("--temp", default=1.0, type=float, \
+        help = "specify response temperature (default: 1), range varies depending on model")
+    parser.add_argument("--tokens", default=100, type=int, \
+        help = "maximum tokens to generate in response (default: 100)")
+    parser.add_argument("--system-prompt", default=system_prompt, \
+        help = "override default system prompt")
+    parser.add_argument("--loglevel", choices=["debug", "info", "warning", "error", "critical"], default="error", \
+        help = "override default log level (default: info)")
     return parser.parse_args()
 
 
@@ -76,8 +80,11 @@ def get_response(chat, user_prompt, model, temp, tokens, system_prompt):
 
 
 def main():
-    # setup script parameters and log details
+    # setup script parameters
     args = set_argparse()
+    # configure logging
+    logging.basicConfig(level=logging.getLevelName(args.loglevel.upper()), format='%(levelname)s - %(message)s')
+    # log model details
     logging.info(f"Model {args.model} selected")
     logging.info(f"System prompt set to: {args.system_prompt}")
     logging.info(f"User prompt set to: {args.prompt}")
@@ -89,7 +96,7 @@ def main():
     chat = completion_module.Completion()
     logging.info(f"Loading completion module {completion_module}")
 
-    # determine actual model name
+    # determine actual model name from environment variable
     model = get_model(args.model)
     logging.info(f"Using model {model}, temperature {args.temp}, max tokens {args.tokens}")
     
@@ -97,7 +104,7 @@ def main():
     reply, prompt_tokens, completion_tokens, total_tokens = get_response(chat, args.prompt, model, args.temp, args.tokens, args.system_prompt)
     logging.info(f"Tokens: {prompt_tokens} (prompt) + {completion_tokens} (completion) = {total_tokens} (total)")
 
-    # print output to console with colored font in a scrolling typewriter effect
+    # print output to console with coloured font in a scrolling typewriter effect
     print(f"🤖 {Fore.CYAN}", end="")
     for char in reply:
         print(char, end="", flush=True)
