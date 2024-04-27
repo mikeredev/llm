@@ -1,15 +1,21 @@
 #!/home/mishi/.config/bash/scripts/llmvenv-py
 # uses: feedparser rofi
 
-# import modules
+# import standard modules
+from datetime import datetime
 import os
 import subprocess
 import sys
 
 # import custom modules
 import feedparser
+
+# import completion module
 sys.path.append('/home/mishi/.config/llm')
 from modules.cohere import completion
+
+# define which language model to use
+MODEL = os.environ.get('COHERE_CMDR_PLUS')
 
 # define how many entries to return from which feed
 FEED_URL = "https://feeds.bbci.co.uk/news/world/rss.xml"
@@ -17,10 +23,8 @@ FEED_SIZE = 2
 
 # define the request parameters
 # don't set temperature too low or it will just repeat back entry titles
-MODEL = os.environ.get('COHERE_CMDR_PLUS')
 TEMPERATURE = 0.5
 MAX_TOKENS = 300
-
 SYSTEM_PROMPT = f"""This is an RSS news feed. Concisely refactor each of these entries, using one (1) representative emoji for each 'category' (e.g., national flag).
 Ensure to include all key information, e.g., locations, key players, implications understood and highlighted.
 Avoid repeating titles or using colons.
@@ -77,10 +81,10 @@ if __name__ == "__main__":
     replies_rofi = "\n".join(replies)
 
     # set title of notification/response
-    title = f"Today's news for {tokens} tokens"
+    title = f"{datetime.today().date()} > Today's news for {tokens} tokens"
     # display output in console
     print(f"{title}:\n{replies_rofi}")
 
     # display output using rofi
-    rofi_command = f'rofi -dmenu -p "{title}" <<< "{replies_rofi}" -theme rofibot'
+    rofi_command = f'rofi -dmenu -mesg "{title}" <<< "{replies_rofi}" -theme rss-reader -theme-str "listview {{lines: {FEED_SIZE};}}"'
     subprocess.run(rofi_command, shell=True)
