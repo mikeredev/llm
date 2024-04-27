@@ -13,7 +13,7 @@ from modules.cohere import completion
 
 # define how many entries to return from which feed
 FEED_URL = "https://feeds.bbci.co.uk/news/world/rss.xml"
-FEED_SIZE = 5
+FEED_SIZE = 2
 
 # define the request parameters
 # don't set temperature too low or it will just repeat back entry titles
@@ -71,8 +71,8 @@ if __name__ == "__main__":
 
     # split reply string into individual lines for rofi
     replies = reply.split('\n')
-    # remove any empty lines from output
-    replies = [line.strip() for line in replies if line.strip()]
+    # escape special characters and remove any blank lines
+    replies = [line.strip().replace("$", "\\$") for line in replies if line.strip()]
     # join the non-blank lines with newline characters
     replies_rofi = "\n".join(replies)
 
@@ -82,5 +82,5 @@ if __name__ == "__main__":
     print(f"{title}:\n{replies_rofi}")
 
     # display output using rofi
-    rofi_command = f'rofi -dmenu -p "{title}" <<< "{replies_rofi}"'
+    rofi_command = f'rofi -dmenu -p "{title}" <<< "{replies_rofi}" -theme rofibot'
     subprocess.run(rofi_command, shell=True)
