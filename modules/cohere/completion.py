@@ -7,11 +7,11 @@ class Completion():
 
     def generate(self, _system_prompt, _user_prompt, _max_tokens, _temperature, _model):
         response = self.co.chat(
-            preamble=_system_prompt,
             message=_user_prompt,
+            model=_model,
             max_tokens=_max_tokens,
             temperature=_temperature,
-            model=_model
+            preamble=_system_prompt
         )
 
         content = response.text
