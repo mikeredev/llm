@@ -18,7 +18,7 @@ sys.path.append('/home/mishi/.config/llm')
 from modules.cohere import completion
 
 # set model parameters
-temperature = 0.5
+temperature = 1
 max_tokens = 300
 
 # default feed url and items to parse (override with script args)
@@ -32,18 +32,18 @@ system_prompt = f"""This is an RSS news feed. Categorise and provide a concise s
 - Ensure to include all key information, e.g., locations, main players, implications understood and highlighted
 - Categorise each item concisely, e.g., "France", "RU/UA conflict", "Hurricane"
 - Return each Index entry on its own newline
-- Format each individual output line as follows: `category_name > concise_summary`
+- Format each output line as follows: `category_name > concise_summary`
 Include no outside text or additional commentary."""
 
 
 # function to setup argparse
+# supports defining feed url, feed items, log level
 def set_argparse():
-    # supports defining feed url and total returned items
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", default=feed_url, \
-        help = f"the RSS feed to read (defaults {feed_url})")
+        help = f"RSS feed location (default: {feed_url})")
     parser.add_argument("--items", type=int, default=feed_items, \
-        help = f"how many items to return from each feed (default: {feed_items})")
+        help = f"how many items to return from feed (default: {feed_items})")
     parser.add_argument("--log-level", default="info", choices=["debug", "info", "warning", "error", "critical"], \
         help = "set log level (default: info)")
     return parser.parse_args()
@@ -57,7 +57,7 @@ def get_rss_items(url, items):
 
     # format each line and add to list
     rss_items = [
-        f"Index:{index} Title:\"{entry['title']}\", Content:\"{entry['summary']}\""
+        f"Index:{index}, Title:\"{entry['title']}\", Content:\"{entry['summary']}\""
         for index, entry in enumerate(feed.entries[:items], start=1)
     ]
     logging.info(rss_items)
@@ -124,7 +124,7 @@ def main():
     # set url/items as default unless arguments are passed
     url = args.url
     items = args.items
-    logging.info(f"Specified feed URL: {url}, specified items: {items}")
+    logging.info(f"Using feed URL: {url}, for items: {items}")
 
     # fetch RSS feed items
     rss_feed = get_rss_items(url, items)
